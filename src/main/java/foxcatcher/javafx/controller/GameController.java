@@ -2,6 +2,7 @@ package foxcatcher.javafx.controller;
 
 import foxcatcher.state.Direction;
 import foxcatcher.state.GameState;
+import foxcatcher.state.PlayerState;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,6 +33,7 @@ public class GameController {
 
     GameState gameState = new GameState();
 
+    PlayerState playerState = new PlayerState();
 
     @Inject
     FXMLLoader fxmlLoader;
@@ -41,6 +43,12 @@ public class GameController {
 
     @FXML
     Label messageLabel;
+
+    @FXML
+    Label p1StepsLabel;
+
+    @FXML
+    Label p2StepsLabel;
 
     @FXML
     GridPane gameGrid;
@@ -54,6 +62,8 @@ public class GameController {
     private int currentY;
 
     public final int[][] Original = gameState.getOriginal();
+
+
 
     private boolean dogSelected=false;
     private boolean foxSelected=false;
@@ -96,7 +106,8 @@ public class GameController {
                 new Image(getClass().getResource("/images/dog.png").toExternalForm())
 
         );
-        setStartingState();;
+        setStartingState();
+        resetGame();
     }
 
     private void setStartingState() {
@@ -131,26 +142,48 @@ public class GameController {
                      gameState.printState();
                      gameState.foxWin(getCurrentX(),getCurrentY());
                      gameState.dogWin(getCurrentX(),getCurrentY());
+                     playerStepIncrease(1);
                      break;
                 case D:
                     Move(Direction.DOWNRIGHT,1,foxSelected);
                     gameState.printState();
                     gameState.foxWin(getCurrentX(),getCurrentY());
                     gameState.dogWin(getCurrentX(),getCurrentY());
+                    playerStepIncrease(1);
                     break;
                 case Q:
                     Move(Direction.UPLEFT,1,foxSelected);
                     gameState.printState();
                     gameState.foxWin(getCurrentX(),getCurrentY());
                     gameState.dogWin(getCurrentX(),getCurrentY());
+                    playerStepIncrease(1);
                     break;
                 case E:
                     Move(Direction.UPRIGHT,1,foxSelected);
                     gameState.printState();
                     gameState.foxWin(getCurrentX(),getCurrentY());
                     gameState.dogWin(getCurrentX(),getCurrentY());
+                    playerStepIncrease(1);
                     break;
             }
+    }
+
+    public void playerStepIncrease(int player){
+        if(player==1){
+            playerState.setP1Steps(playerState.getP1Steps()+1);
+            p1StepsLabel.setText(playerState.toString(playerState.getP1Steps()));
+        }
+        else if(player==2){
+            playerState.setP2Steps(playerState.getP2Steps()+1);
+            p2StepsLabel.setText(playerState.toString(playerState.getP2Steps()));
+        }
+    }
+
+    public void resetSteps(){
+        playerState.setP1Steps(0);
+        playerState.setP2Steps(0);
+        p1StepsLabel.setText("0");
+        p2StepsLabel.setText("0");
     }
 
     @FXML
@@ -159,10 +192,12 @@ public class GameController {
             case Q:
                 Move(Direction.UPLEFT,2,dogSelected);
                 gameState.printState();
+                playerStepIncrease(2);
                 break;
             case E:
                 Move(Direction.UPRIGHT,2,dogSelected);
                 gameState.printState();
+                playerStepIncrease(2);
                 break;
         }
     }
@@ -207,6 +242,8 @@ public class GameController {
         startTime=Instant.now();
       createStopWatch();
       Platform.runLater(()-> messageLabel.setText("Good Luck "+ player1Name + " and " + player2Name));
+
+      resetSteps();
 
       for(int i=0; i<8; i++) {
           for (int j = 0 ;j < 8; j++) {

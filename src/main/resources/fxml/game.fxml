@@ -45,6 +45,38 @@
                   <Font size="25.0" />
                </font>
             </Label>
+            <Label text="P1's steps:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="p1StepsLabel" prefHeight="18.0" prefWidth="28.0" text="0">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label text="P2's steps">
+               <VBox.margin>
+                  <Insets left="10.0" top="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="p2StepsLabel" prefHeight="18.0" prefWidth="21.0" text="0">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </right>
@@ -145,14 +177,6 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset">
-               <HBox.margin>
-                  <Insets top="20.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" text="Give up">
                <HBox.margin>
                   <Insets top="20.0" />
                </HBox.margin>
