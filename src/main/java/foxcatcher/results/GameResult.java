@@ -32,11 +32,14 @@ public class GameResult {
     /**
      * Indicates whether the player has solved the puzzle.
      */
-    private boolean solved;
 
+
+    @Column(nullable = false)
+    private String animal;
     /**
      * The number of steps made by the player.
      */
+
     private int steps;
 
     /**

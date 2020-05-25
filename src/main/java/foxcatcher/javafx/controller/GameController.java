@@ -1,5 +1,7 @@
 package foxcatcher.javafx.controller;
 
+import foxcatcher.results.GameResult;
+import foxcatcher.results.GameResultDao;
 import foxcatcher.state.Direction;
 import foxcatcher.state.GameState;
 import foxcatcher.state.PlayerState;
@@ -11,29 +13,34 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.inject.Inject;
-import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Slf4j
 public class GameController {
 
     GameState gameState = new GameState();
 
     PlayerState playerState = new PlayerState();
+
+    @Inject
+    private GameResultDao gameResultDao;
 
     @Inject
     FXMLLoader fxmlLoader;
@@ -58,45 +65,9 @@ public class GameController {
     private List<Image> boardImages;
     private Timeline stopWatchTimeline;
 
-    private int currentX;
-    private int currentY;
+    public void setPlayer1Name(String player1Name){ this.player1Name = player1Name; }
 
-    public final int[][] Original = gameState.getOriginal();
-
-
-
-    private boolean dogSelected=false;
-    private boolean foxSelected=false;
-
-
-    public int getCurrentX(){
-        return currentX;
-    }
-
-    public int getCurrentY(){
-        return currentY;
-    }
-
-    public void setPlayer1Name(String player1Name) {
-        this.player1Name = player1Name;
-    }
-
-    public void setPlayer2Name(String player2Name) {
-        this.player2Name = player2Name;
-    }
-
-    public void setCurrentPosition(int currentX, int currentY){
-        this.currentX = currentX;
-        this.currentY = currentY;
-    }
-
-    public void setPlayerState(int player,boolean state){
-        if(player==1)
-            foxSelected=state;
-        if(player==2)
-            dogSelected=state;
-    }
-
+    public void setPlayer2Name(String player2Name){ this.player2Name = player2Name; }
 
     @FXML
     public void initialize() {
@@ -122,15 +93,16 @@ public class GameController {
 
     @FXML
     private void Move(Direction direction,int image,boolean player){
-        if(gameState.isValidMove(currentX,currentY,direction)==true){
-            gameState.nullPosition(currentX,currentY);
-            ImageView imageView = (ImageView) gameGrid.getChildren().get(currentX * 8 + currentY);
+        if(gameState.isValidMove(gameState.getCurrentX(),gameState.getCurrentY(),direction)){
+            gameState.nullPosition(gameState.getCurrentX(),gameState.getCurrentY());
+            ImageView imageView = (ImageView) gameGrid.getChildren().get(gameState.getCurrentX() * 8 + gameState.getCurrentY());
             imageView.setImage(boardImages.get(0));
-            setCurrentPosition(currentX + direction.getDx(),currentY+direction.getDy());
-            gameState.setPosition(currentX,currentY,image);
-            ImageView newFox = (ImageView) gameGrid.getChildren().get(currentX * 8 + currentY);
+            gameState.setCurrentXandY(gameState.getCurrentX() + direction.getDx(),gameState.getCurrentY()+direction.getDy());
+            gameState.setPosition(gameState.getCurrentX(),gameState.getCurrentY(),image);
+            ImageView newFox = (ImageView) gameGrid.getChildren().get(gameState.getCurrentX() * 8 + gameState.getCurrentY());
             newFox.setImage(boardImages.get(image));
-            setPlayerState(image,false);
+            gameState.setSelectedCharacter(image,false);
+            log.info("The number {} player moved to the {} direction.",image,direction);
         }
     }
 
@@ -138,31 +110,23 @@ public class GameController {
     private void foxMove(KeyEvent keyEvent){
             switch (keyEvent.getCode()) {
                 case A:
-                     Move(Direction.DOWNLEFT,1,foxSelected);
-                     gameState.printState();
-                     gameState.foxWin(getCurrentX(),getCurrentY());
-                     gameState.dogWin(getCurrentX(),getCurrentY());
+                     Move(Direction.DOWNLEFT,1,gameState.isFoxSelected());
+                     winHandler();
                      playerStepIncrease(1);
                      break;
                 case D:
-                    Move(Direction.DOWNRIGHT,1,foxSelected);
-                    gameState.printState();
-                    gameState.foxWin(getCurrentX(),getCurrentY());
-                    gameState.dogWin(getCurrentX(),getCurrentY());
+                    Move(Direction.DOWNRIGHT,1,gameState.isFoxSelected());
+                    winHandler();
                     playerStepIncrease(1);
                     break;
                 case Q:
-                    Move(Direction.UPLEFT,1,foxSelected);
-                    gameState.printState();
-                    gameState.foxWin(getCurrentX(),getCurrentY());
-                    gameState.dogWin(getCurrentX(),getCurrentY());
+                    Move(Direction.UPLEFT,1,gameState.isFoxSelected());
+                    winHandler();
                     playerStepIncrease(1);
                     break;
                 case E:
-                    Move(Direction.UPRIGHT,1,foxSelected);
-                    gameState.printState();
-                    gameState.foxWin(getCurrentX(),getCurrentY());
-                    gameState.dogWin(getCurrentX(),getCurrentY());
+                    Move(Direction.UPRIGHT,1,gameState.isFoxSelected());
+                    winHandler();
                     playerStepIncrease(1);
                     break;
             }
@@ -184,19 +148,18 @@ public class GameController {
         playerState.setP2Steps(0);
         p1StepsLabel.setText("0");
         p2StepsLabel.setText("0");
+        log.info("The steps has ben reset");
     }
 
     @FXML
     private void dogMove(KeyEvent keyEvent){
         switch (keyEvent.getCode()){
             case Q:
-                Move(Direction.UPLEFT,2,dogSelected);
-                gameState.printState();
+                Move(Direction.UPLEFT,2,gameState.isDogSelected());
                 playerStepIncrease(2);
                 break;
             case E:
-                Move(Direction.UPRIGHT,2,dogSelected);
-                gameState.printState();
+                Move(Direction.UPRIGHT,2,gameState.isDogSelected());
                 playerStepIncrease(2);
                 break;
         }
@@ -206,35 +169,74 @@ public class GameController {
 
     @FXML
     private void moveHandler(KeyEvent keyEvent) {
-        if(foxSelected==true){
-            System.out.println("Fox has moved");
+        if(gameState.isFoxSelected()){
             foxMove(keyEvent);
         }
-        else if(dogSelected==true) {
-            System.out.println("Dog has moved");
+        else if(gameState.isDogSelected()) {
             dogMove(keyEvent);
         }
     }
+
+
 
     @FXML
     private void handleClickOnPostion(MouseEvent mouseEvent){
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-        System.out.println("Position: "+row+" "+col+" is pressed"); //TODO Change to log later
-        if(gameState.getTablePosition(row,col)==1) {
-            foxSelected = true;
-            dogSelected=false;
-            currentX = row;
-            currentY = col;
+        log.info("Position {} {} is pressed",row,col);
+        if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"){
+            gameState.setFoxSelected(true);
+            gameState.setDogSelected(false);
+            gameState.setCurrentX(row);
+            gameState.setCurrentY(col);
+            gameState.setCurrentCharacter("dog");
         }
-        else if(gameState.getTablePosition(row,col)==2) {
-            dogSelected = true;
-            foxSelected=false;
-            currentX = row;
-            currentY = col;
+        else if((gameState.getTablePosition(row,col)==2)&&gameState.getCurrentCharacter()=="dog"){
+            gameState.setDogSelected(true);
+            gameState.setFoxSelected(false);
+            gameState.setCurrentX(row);
+            gameState.setCurrentY(col);
+            gameState.setCurrentCharacter("fox");
         }
     }
 
+    @FXML
+    public void handleFinishButton(ActionEvent actionEvent) throws IOException {
+        fxmlLoader.setLocation(getClass().getResource("/fxml/highscore.fxml"));
+        Parent root2 = fxmlLoader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root2));
+        stage.show();
+
+    }
+
+    public void winHandler(){
+        if(gameState.foxWin(gameState.getCurrentX(),gameState.getCurrentY())){
+            gameState.setWinnerName(player1Name);
+            gameState.setWinnerSteps(playerState.getP1Steps());
+            gameState.setWinnerCharacter("fox");
+            gameResultDao.persist(createGameResult());
+            stopWatchTimeline.stop();
+        }
+        else if(gameState.dogWin(gameState.getCurrentX(),gameState.getCurrentY())){
+            gameState.setWinnerName(player2Name);
+            gameState.setWinnerSteps(playerState.getP2Steps());
+            gameState.setWinnerCharacter("dog");
+            gameResultDao.persist(createGameResult());
+            stopWatchTimeline.stop();
+        }
+    }
+
+
+   private GameResult createGameResult(){
+        GameResult result = GameResult.builder()
+                .player(gameState.getWinnerName())
+                .steps(gameState.getWinnerSteps())
+                .animal(gameState.getWinnerCharacter())
+                .duration(Duration.between(startTime,Instant.now()))
+                .build();
+        return result;
+   }
 
 
     private void resetGame() {
@@ -272,5 +274,6 @@ public class GameController {
         stopWatchTimeline.setCycleCount(Animation.INDEFINITE);
         stopWatchTimeline.play();
     }
+
 }
 

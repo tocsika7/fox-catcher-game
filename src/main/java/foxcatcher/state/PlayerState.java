@@ -2,8 +2,15 @@ package foxcatcher.state;
 
 public class PlayerState {
 
-    private int p1Steps=0;
-    private int p2Steps=0;
+    /**
+     * A value that stores the steps of the fox.
+     */
+    private int p1Steps = 0;
+
+    /**
+     * A value that stores the steps of the dogs.
+     */
+    private int p2Steps = 0;
 
     public void setP1Steps(int p1Steps) {
         this.p1Steps = p1Steps;
@@ -21,8 +28,12 @@ public class PlayerState {
         return p2Steps;
     }
 
+    /**
+     * A method that makes a {@code String} from an {@code Integer}
+     * @param a The int to convert.
+     * @return The given {@code Integer} converted as a {@cde String}.
+     */
+    public String toString(int a) { return "" + a; }
 
-    public String toString(int a){
-        return ""+a;
-    }
+
 }

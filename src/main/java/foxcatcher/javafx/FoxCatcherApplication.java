@@ -20,7 +20,7 @@ public class FoxCatcherApplication extends Application {
             new AbstractModule() {
                 @Override
                 protected void configure() {
-                    install(new PersistenceModule("fox-catcher"));
+                    install(new PersistenceModule("foxcatcher"));
                     bind(GameResultDao.class);
                 }
             }

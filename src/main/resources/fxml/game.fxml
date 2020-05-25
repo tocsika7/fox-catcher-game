@@ -53,7 +53,7 @@
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="p1StepsLabel" prefHeight="18.0" prefWidth="28.0" text="0">
+            <Label fx:id="p1StepsLabel" prefHeight="29.0" prefWidth="66.0" text="0">
                <VBox.margin>
                   <Insets left="10.0" />
                </VBox.margin>
@@ -69,7 +69,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="p2StepsLabel" prefHeight="18.0" prefWidth="21.0" text="0">
+            <Label fx:id="p2StepsLabel" prefHeight="29.0" prefWidth="64.0" text="0">
                <VBox.margin>
                   <Insets left="10.0" />
                </VBox.margin>
@@ -179,6 +179,14 @@
             <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset">
                <HBox.margin>
                   <Insets top="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="finishButton" mnemonicParsing="false" onAction="#handleFinishButton" text="Show ScoreBoard">
+               <HBox.margin>
+                  <Insets left="20.0" top="20.0" />
                </HBox.margin>
                <font>
                   <Font size="20.0" />
