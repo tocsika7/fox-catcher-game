@@ -28,12 +28,5 @@ public class PlayerState {
         return p2Steps;
     }
 
-    /**
-     * A method that makes a {@code String} from an {@code Integer}
-     * @param a The int to convert.
-     * @return The given {@code Integer} converted as a {@cde String}.
-     */
-    public String toString(int a) { return "" + a; }
-
 
 }

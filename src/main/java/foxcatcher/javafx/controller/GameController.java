@@ -135,11 +135,11 @@ public class GameController {
     public void playerStepIncrease(int player){
         if(player==1){
             playerState.setP1Steps(playerState.getP1Steps()+1);
-            p1StepsLabel.setText(playerState.toString(playerState.getP1Steps()));
+            p1StepsLabel.setText(String.valueOf(playerState.getP1Steps()));
         }
         else if(player==2){
             playerState.setP2Steps(playerState.getP2Steps()+1);
-            p2StepsLabel.setText(playerState.toString(playerState.getP2Steps()));
+            p2StepsLabel.setText(String.valueOf(playerState.getP2Steps()));
         }
     }
 
@@ -216,6 +216,11 @@ public class GameController {
             gameState.setWinnerSteps(playerState.getP1Steps());
             gameState.setWinnerCharacter("fox");
             gameResultDao.persist(createGameResult());
+            for(int i=0;i<8;i++){
+                for(int j=0;j<8;j++){
+                    gameState.nullPosition(i,j);
+                }
+            }
             stopWatchTimeline.stop();
         }
         else if(gameState.dogWin(gameState.getCurrentX(),gameState.getCurrentY())){
@@ -223,6 +228,11 @@ public class GameController {
             gameState.setWinnerSteps(playerState.getP2Steps());
             gameState.setWinnerCharacter("dog");
             gameResultDao.persist(createGameResult());
+            for(int i=0;i<8;i++){
+                for(int j=0;j<8;j++){
+                    gameState.nullPosition(i,j);
+                }
+            }
             stopWatchTimeline.stop();
         }
     }
