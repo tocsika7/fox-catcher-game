@@ -28,7 +28,7 @@ public class FoxCatcherApplication extends Application {
 
 
     @Inject
-    FXMLLoader fxmlLoader;
+    private FXMLLoader fxmlLoader;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

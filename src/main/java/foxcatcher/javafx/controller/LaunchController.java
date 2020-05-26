@@ -30,7 +30,7 @@ public class LaunchController {
     private Label errorLabel;
 
 
-    public void startAction(ActionEvent actionEvent) throws IOException {
+    public void startAction(final ActionEvent actionEvent) throws IOException {
         if ((player1NameTextField.getText().isEmpty())||(player2NameTextField.getText().isEmpty())) {
             errorLabel.setText("Enter your name!");
         }else {
@@ -41,7 +41,7 @@ public class LaunchController {
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.show();
-                log.info("The players names are set to {},{}, loading game scene", player1NameTextField.getText(), player2NameTextField.getText());
+                log.info("The players names are set to {},{}, loading game scene" , player1NameTextField.getText(), player2NameTextField.getText());
             }
         }
     }
