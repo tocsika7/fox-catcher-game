@@ -23,6 +23,6 @@ Then the possible moves are:
 + A: Down left (fox only)
 + E: Down right (fox only)
 
-###Requirements
+### Requirements
 
 Building the project requires JDK 11 or later and [Apache Maven](https://maven.apache.org/).
