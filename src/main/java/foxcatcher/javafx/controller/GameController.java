@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,6 +61,12 @@ public class GameController {
     @FXML
     GridPane gameGrid;
 
+    @FXML
+    Button resetButton;
+
+    @FXML
+    Button highscoreButton;
+
     private String player1Name, player2Name;
     private Instant startTime;
     private List<Image> boardImages;
@@ -101,7 +108,7 @@ public class GameController {
             gameState.setPosition(gameState.getCurrentX(),gameState.getCurrentY(),image);
             ImageView newFox = (ImageView) gameGrid.getChildren().get(gameState.getCurrentX() * 8 + gameState.getCurrentY());
             newFox.setImage(boardImages.get(image));
-            gameState.setSelectedCharacter(image,false);
+            playerState.setSelectedCharacter(image,false);
             log.info("The number {} player moved to the {} direction.",image,direction);
         }
     }
@@ -110,22 +117,22 @@ public class GameController {
     private void foxMove(KeyEvent keyEvent){
             switch (keyEvent.getCode()) {
                 case A:
-                     Move(Direction.DOWNLEFT,1,gameState.isFoxSelected());
+                     Move(Direction.DOWNLEFT,1,playerState.isFoxSelected());
                      winHandler();
                      playerStepIncrease(1);
                      break;
                 case D:
-                    Move(Direction.DOWNRIGHT,1,gameState.isFoxSelected());
+                    Move(Direction.DOWNRIGHT,1,playerState.isFoxSelected());
                     winHandler();
                     playerStepIncrease(1);
                     break;
                 case Q:
-                    Move(Direction.UPLEFT,1,gameState.isFoxSelected());
+                    Move(Direction.UPLEFT,1,playerState.isFoxSelected());
                     winHandler();
                     playerStepIncrease(1);
                     break;
                 case E:
-                    Move(Direction.UPRIGHT,1,gameState.isFoxSelected());
+                    Move(Direction.UPRIGHT,1,playerState.isFoxSelected());
                     winHandler();
                     playerStepIncrease(1);
                     break;
@@ -155,11 +162,11 @@ public class GameController {
     private void dogMove(KeyEvent keyEvent){
         switch (keyEvent.getCode()){
             case Q:
-                Move(Direction.UPLEFT,2,gameState.isDogSelected());
+                Move(Direction.UPLEFT,2,playerState.isDogSelected());
                 playerStepIncrease(2);
                 break;
             case E:
-                Move(Direction.UPRIGHT,2,gameState.isDogSelected());
+                Move(Direction.UPRIGHT,2,playerState.isDogSelected());
                 playerStepIncrease(2);
                 break;
         }
@@ -169,10 +176,10 @@ public class GameController {
 
     @FXML
     private void moveHandler(KeyEvent keyEvent) {
-        if(gameState.isFoxSelected()){
+        if(playerState.isFoxSelected()){
             foxMove(keyEvent);
         }
-        else if(gameState.isDogSelected()) {
+        else if(playerState.isDogSelected()) {
             dogMove(keyEvent);
         }
     }
@@ -185,15 +192,15 @@ public class GameController {
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         log.info("Position {} {} is pressed",row,col);
         if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"){
-            gameState.setFoxSelected(true);
-            gameState.setDogSelected(false);
+            playerState.setFoxSelected(true);
+            playerState.setDogSelected(false);
             gameState.setCurrentX(row);
             gameState.setCurrentY(col);
             gameState.setCurrentCharacter("dog");
         }
         else if((gameState.getTablePosition(row,col)==2)&&gameState.getCurrentCharacter()=="dog"){
-            gameState.setDogSelected(true);
-            gameState.setFoxSelected(false);
+            playerState.setDogSelected(true);
+            playerState.setFoxSelected(false);
             gameState.setCurrentX(row);
             gameState.setCurrentY(col);
             gameState.setCurrentCharacter("fox");
@@ -201,7 +208,7 @@ public class GameController {
     }
 
     @FXML
-    public void handleFinishButton(ActionEvent actionEvent) throws IOException {
+    public void handleHighScoreButton(ActionEvent actionEvent) throws IOException {
         fxmlLoader.setLocation(getClass().getResource("/fxml/highscore.fxml"));
         Parent root2 = fxmlLoader.load();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

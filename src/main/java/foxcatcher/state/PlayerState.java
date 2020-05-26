@@ -1,32 +1,51 @@
 package foxcatcher.state;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
 public class PlayerState {
 
     /**
      * A value that stores the steps of the fox.
      */
+    @Setter(AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     private int p1Steps = 0;
 
     /**
      * A value that stores the steps of the dogs.
      */
+    @Setter(AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
     private int p2Steps = 0;
 
-    public void setP1Steps(int p1Steps) {
-        this.p1Steps = p1Steps;
-    }
+    /**
+     *  Value that stores if the currently selected character is the dog.
+     */
+    @Setter(AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    private boolean dogSelected = false;
 
-    public void setP2Steps(int p2Steps) {
-        this.p2Steps = p2Steps;
-    }
+    /**
+     *  Value that stores if the currently selected character is the fox.
+     */
+    @Setter(AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PUBLIC)
+    private boolean foxSelected = false;
 
-    public int getP1Steps() {
-        return p1Steps;
+    /**
+     *  A method that sets either one of the selected characters.
+     * @param player Which players character should be set.
+     * @param state  What the characters state should be.
+     */
+    public void setSelectedCharacter(int player, boolean state){
+        if(player==1)
+            foxSelected=state;
+        if(player==2)
+            dogSelected=state;
     }
-
-    public int getP2Steps() {
-        return p2Steps;
-    }
-
 
 }

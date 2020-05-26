@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 public class GameState {
 
     public GameState(){
-
     }
 
     public GameState(int[][] Board){
@@ -59,19 +58,6 @@ public class GameState {
     @Getter(AccessLevel.PUBLIC)
     private String winnerCharacter;
 
-    /**
-     *  Value that stores if the currently selected character is the dog.
-     */
-    @Setter(AccessLevel.PUBLIC)
-    @Getter(AccessLevel.PUBLIC)
-    private boolean dogSelected = false;
-
-    /**
-     *  Value that stores if the currently selected character is the fox.
-     */
-    @Setter(AccessLevel.PUBLIC)
-    @Getter(AccessLevel.PUBLIC)
-    private boolean foxSelected = false;
 
     /**
      *  A 2D Array which represents the game's board.
@@ -88,18 +74,6 @@ public class GameState {
             {0,2,0,2,0,2,0,2},
     };
 
-
-    /**
-     *  A method that sets either one of the selected characters.
-     * @param player Which players character should be set.
-     * @param state  What the characters state should be.
-     */
-    public void setSelectedCharacter(int player, boolean state){
-        if(player==1)
-            foxSelected=state;
-        if(player==2)
-            dogSelected=state;
-    }
 
     /**
      *  A method that sets both the current x and y coordinates of the player.

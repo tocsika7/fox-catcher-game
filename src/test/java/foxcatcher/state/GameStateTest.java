@@ -12,25 +12,6 @@ public class GameStateTest {
     GameState gameState = new GameState();
 
     @Test
-    void testSetSelectedCharacter(){
-        gameState.setFoxSelected(false);
-        gameState.setSelectedCharacter(1,true);
-        assertTrue(gameState.isFoxSelected());
-
-        gameState.setSelectedCharacter(1,false);
-        assertFalse(gameState.isFoxSelected());
-
-        gameState.setDogSelected(false);
-        gameState.setSelectedCharacter(2,true);
-        assertTrue(gameState.isDogSelected());
-
-        gameState.setSelectedCharacter(2,false);
-        assertFalse(gameState.isDogSelected());
-    }
-
-
-
-    @Test
     void testSetCurrentXandY(){
         gameState = new GameState();
         gameState.setCurrentXandY(3,4);

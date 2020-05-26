@@ -184,7 +184,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="finishButton" mnemonicParsing="false" onAction="#handleFinishButton" text="Show ScoreBoard">
+            <Button fx:id="highscoreButton" mnemonicParsing="false" onAction="#handleHighScoreButton" text="Show ScoreBoard">
                <HBox.margin>
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
