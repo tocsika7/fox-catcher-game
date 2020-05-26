@@ -109,7 +109,7 @@ public class GameController {
             ImageView newFox = (ImageView) gameGrid.getChildren().get(gameState.getCurrentX() * 8 + gameState.getCurrentY());
             newFox.setImage(boardImages.get(image));
             playerState.setSelectedCharacter(image,false);
-            log.info("The number {} player moved to the {} direction.",image,direction);
+            log.info("Player{} moved to the {} direction.",image,direction);
         }
     }
 
@@ -155,7 +155,7 @@ public class GameController {
         playerState.setP2Steps(0);
         p1StepsLabel.setText("0");
         p2StepsLabel.setText("0");
-        log.info("The steps has ben reset");
+        log.info("The steps has been reset");
     }
 
     @FXML
@@ -190,7 +190,7 @@ public class GameController {
     private void handleClickOnPostion(MouseEvent mouseEvent){
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-        log.info("Position {} {} is pressed",row,col);
+        log.info("Position {} {} is selected.",row,col);
         if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"){
             playerState.setFoxSelected(true);
             playerState.setDogSelected(false);
@@ -223,6 +223,7 @@ public class GameController {
             gameState.setWinnerSteps(playerState.getP1Steps());
             gameState.setWinnerCharacter("fox");
             gameResultDao.persist(createGameResult());
+            messageLabel.setText("Congratulations "+player1Name+"!");
             for(int i=0;i<8;i++){
                 for(int j=0;j<8;j++){
                     gameState.nullPosition(i,j);
@@ -235,6 +236,7 @@ public class GameController {
             gameState.setWinnerSteps(playerState.getP2Steps());
             gameState.setWinnerCharacter("dog");
             gameResultDao.persist(createGameResult());
+            messageLabel.setText("Congratulations "+player2Name+"!");
             for(int i=0;i<8;i++){
                 for(int j=0;j<8;j++){
                     gameState.nullPosition(i,j);

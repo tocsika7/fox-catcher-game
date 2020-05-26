@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *  A class representing the state of the players.
+ */
 @Data
 public class PlayerState {
 

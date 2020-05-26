@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *  Class representing the state of the game and the board.
+ */
 @Data
 @Slf4j
 public class GameState {
@@ -119,7 +122,7 @@ public class GameState {
      * @param x The current x position of the player.
      * @param y The current y position of the player
      * @param direction The {@code Direction} in which the player wants to move.
-     * @throws ArrayIndexOutOfBoundsException when the move would move out of the board.
+     * @throws ArrayIndexOutOfBoundsException when the player would move out the board.
      * @return Whether the move is valid or not.
      */
     public boolean isValidMove(int x, int y, Direction direction){
@@ -166,7 +169,7 @@ public class GameState {
                 (!isValidMove(x, y, Direction.UPLEFT))&&
                 (!isValidMove(x, y, Direction.DOWNLEFT))&&
                 (!isValidMove(x, y, Direction.DOWNRIGHT))){
-            log.info("Th dog has won");
+            log.info("The dogs has won the game");
             return true;
         }
         return false;
