@@ -10,6 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GameState {
 
+    public GameState(){
+
+    }
+
+    public GameState(int[][] Board){
+        this.Board = Board;
+    }
     /**
      *  Value that stores the x position of the table's currently selected field.
      */
