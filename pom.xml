@@ -9,8 +9,8 @@
     <version>1.0</version>
     <description>The fox-catcher board game.</description>
     <scm>
-        <connection>https://github.com/tocsika7/fox-catcher-game.git</connection>
-        <developerConnection>https://github.com/tocsika7/fox-catcher-game.git</developerConnection>
+        <connection>scm:git:https://github.com/tocsika7/fox-catcher-game.git</connection>
+        <developerConnection>scm:git:https://github.com/tocsika7/fox-catcher-game.git</developerConnection>
     </scm>
     <developers>
         <developer>
