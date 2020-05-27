@@ -191,14 +191,14 @@ public class GameController {
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         log.info("Position {} {} is selected.",row,col);
-        if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"){
+        if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"&&gameState.getCurrentCharacter()!="win"){
             playerState.setFoxSelected(true);
             playerState.setDogSelected(false);
             gameState.setCurrentX(row);
             gameState.setCurrentY(col);
             gameState.setCurrentCharacter("dog");
         }
-        else if((gameState.getTablePosition(row,col)==2)&&gameState.getCurrentCharacter()=="dog"){
+        else if((gameState.getTablePosition(row,col)==2)&&gameState.getCurrentCharacter()=="dog"&&gameState.getCurrentCharacter()!="win"){
             playerState.setDogSelected(true);
             playerState.setFoxSelected(false);
             gameState.setCurrentX(row);
@@ -224,11 +224,7 @@ public class GameController {
             gameState.setWinnerCharacter("fox");
             gameResultDao.persist(createGameResult());
             messageLabel.setText("Congratulations "+player1Name+"!");
-            for(int i=0;i<8;i++){
-                for(int j=0;j<8;j++){
-                    gameState.nullPosition(i,j);
-                }
-            }
+            gameState.setCurrentCharacter("win");
             stopWatchTimeline.stop();
         }
         else if(gameState.dogWin(gameState.getCurrentX(),gameState.getCurrentY())){
@@ -237,11 +233,7 @@ public class GameController {
             gameState.setWinnerCharacter("dog");
             gameResultDao.persist(createGameResult());
             messageLabel.setText("Congratulations "+player2Name+"!");
-            for(int i=0;i<8;i++){
-                for(int j=0;j<8;j++){
-                    gameState.nullPosition(i,j);
-                }
-            }
+            gameState.setCurrentCharacter("win");
             stopWatchTimeline.stop();
         }
     }
@@ -263,7 +255,7 @@ public class GameController {
         startTime=Instant.now();
       createStopWatch();
       Platform.runLater(()-> messageLabel.setText("Good Luck "+ player1Name + " and " + player2Name));
-
+      gameState.setCurrentCharacter("fox");
       resetSteps();
 
       for(int i=0; i<8; i++) {
