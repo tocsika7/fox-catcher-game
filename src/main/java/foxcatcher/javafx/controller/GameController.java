@@ -187,7 +187,7 @@ public class GameController {
 
 
     @FXML
-    private void handleClickOnPostion(MouseEvent mouseEvent){
+    private void handleClickOnPosition(MouseEvent mouseEvent){
         int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
         int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
         log.info("Position {} {} is selected.",row,col);
