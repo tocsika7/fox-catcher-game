@@ -188,23 +188,22 @@ public class GameController {
 
     @FXML
     private void handleClickOnPosition(MouseEvent mouseEvent){
-        int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
-        int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
-        log.info("Position {} {} is selected.",row,col);
-        if((gameState.getTablePosition(row,col)==1)&&gameState.getCurrentCharacter()=="fox"&&gameState.getCurrentCharacter()!="win"){
-            playerState.setFoxSelected(true);
-            playerState.setDogSelected(false);
-            gameState.setCurrentX(row);
-            gameState.setCurrentY(col);
-            gameState.setCurrentCharacter("dog");
-        }
-        else if((gameState.getTablePosition(row,col)==2)&&gameState.getCurrentCharacter()=="dog"&&gameState.getCurrentCharacter()!="win"){
-            playerState.setDogSelected(true);
-            playerState.setFoxSelected(false);
-            gameState.setCurrentX(row);
-            gameState.setCurrentY(col);
-            gameState.setCurrentCharacter("fox");
-        }
+            int row = GridPane.getRowIndex((Node) mouseEvent.getSource());
+            int col = GridPane.getColumnIndex((Node) mouseEvent.getSource());
+            log.info("Position {} {} is selected.", row, col);
+            if ((gameState.getTablePosition(row, col) == 1) && gameState.getCurrentCharacter() == "fox" && gameState.getCurrentCharacter() != "win") {
+                playerState.setFoxSelected(true);
+                playerState.setDogSelected(false);
+                gameState.setCurrentX(row);
+                gameState.setCurrentY(col);
+                gameState.setCurrentCharacter("dog");
+            } else if ((gameState.getTablePosition(row, col) == 2) && gameState.getCurrentCharacter() == "dog" && gameState.getCurrentCharacter() != "win") {
+                playerState.setDogSelected(true);
+                playerState.setFoxSelected(false);
+                gameState.setCurrentX(row);
+                gameState.setCurrentY(col);
+                gameState.setCurrentCharacter("fox");
+            }
     }
 
     @FXML
@@ -218,23 +217,24 @@ public class GameController {
     }
 
     public void winHandler(){
-        if(gameState.foxWin(gameState.getCurrentX(),gameState.getCurrentY())){
-            gameState.setWinnerName(player1Name);
-            gameState.setWinnerSteps(playerState.getP1Steps());
-            gameState.setWinnerCharacter("fox");
-            gameResultDao.persist(createGameResult());
-            messageLabel.setText("Congratulations "+player1Name+"!");
-            gameState.setCurrentCharacter("win");
-            stopWatchTimeline.stop();
-        }
-        else if(gameState.dogWin(gameState.getCurrentX(),gameState.getCurrentY())){
-            gameState.setWinnerName(player2Name);
-            gameState.setWinnerSteps(playerState.getP2Steps());
-            gameState.setWinnerCharacter("dog");
-            gameResultDao.persist(createGameResult());
-            messageLabel.setText("Congratulations "+player2Name+"!");
-            gameState.setCurrentCharacter("win");
-            stopWatchTimeline.stop();
+        if(gameState.getCurrentCharacter() != "win") {
+            if (gameState.foxWin(gameState.getCurrentX(), gameState.getCurrentY())) {
+                gameState.setWinnerName(player1Name);
+                gameState.setWinnerSteps(playerState.getP1Steps());
+                gameState.setWinnerCharacter("fox");
+                gameResultDao.persist(createGameResult());
+                messageLabel.setText("Congratulations " + player1Name + "!");
+                gameState.setCurrentCharacter("win");
+                stopWatchTimeline.stop();
+            } else if (gameState.dogWin(gameState.getCurrentX(), gameState.getCurrentY())) {
+                gameState.setWinnerName(player2Name);
+                gameState.setWinnerSteps(playerState.getP2Steps());
+                gameState.setWinnerCharacter("dog");
+                gameResultDao.persist(createGameResult());
+                messageLabel.setText("Congratulations " + player2Name + "!");
+                gameState.setCurrentCharacter("win");
+                stopWatchTimeline.stop();
+            }
         }
     }
 
